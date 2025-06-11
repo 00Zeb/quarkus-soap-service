@@ -24,7 +24,7 @@ public class HelloWorldServiceImpl implements HelloWorldService {
         if (name == null || name.trim().isEmpty()) {
             name = "World";
         }
-        return "Hello, " + name + "! Welcome to Quarkus SOAP Service with HTTPS!";
+        return "Hello, " + name + "! Welcome to Quarkus SOAP Service with Mutual TLS!";
     }
 
     @Override

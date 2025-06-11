@@ -23,7 +23,8 @@ public class HealthResource {
             "timestamp", LocalDateTime.now().toString(),
             "soap_endpoint", "/soap",
             "wsdl_url", "/soap/HelloWorldService?wsdl",
-            "https_enabled", true
+            "https_enabled", true,
+            "mutual_tls_enabled", true
         );
         return Response.ok(status).build();
     }
@@ -33,13 +34,14 @@ public class HealthResource {
     @Produces(MediaType.TEXT_PLAIN)
     public String info() {
         return """
-            🚀 Quarkus SOAP Service with HTTPS
-            
-            📡 SOAP Endpoint: https://localhost:8443/soap
-            📋 WSDL: https://localhost:8443/soap/HelloWorldService?wsdl
-            🔒 HTTPS: Enabled with self-signed certificate
-            ⚡ Health Check: https://localhost:8443/health
-            
+            🚀 Quarkus SOAP Service with Mutual TLS
+
+            📡 SOAP Endpoint: https://localhost:8444/soap
+            📋 WSDL: https://localhost:8444/soap/HelloWorldService?wsdl
+            🔒 Mutual TLS: Enabled with client certificate authentication
+            ⚡ Health Check: https://localhost:8444/health
+            🔑 Client Certificate: Required for all connections
+
             Available SOAP Methods:
             - sayHello(name): Returns a greeting message
             - getServerTime(): Returns current server time

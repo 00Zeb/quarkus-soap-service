@@ -1,5 +1,5 @@
 # PowerShell script to run Quarkus SOAP Service
-Write-Host "🚀 Starting Quarkus SOAP Service with HTTPS..." -ForegroundColor Green
+Write-Host "🚀 Starting Quarkus SOAP Service with Mutual TLS..." -ForegroundColor Green
 Write-Host ""
 
 # Check if Maven is installed
@@ -27,9 +27,9 @@ try {
     Write-Host "Alternative: Use your IDE's Maven integration"
     Write-Host ""
     Write-Host "Once running, the application will be available at:"
-    Write-Host "- HTTPS: https://localhost:8443" -ForegroundColor Cyan
-    Write-Host "- SOAP Service: https://localhost:8443/soap" -ForegroundColor Cyan
-    Write-Host "- WSDL: https://localhost:8443/soap/HelloWorldService?wsdl" -ForegroundColor Cyan
+    Write-Host "- HTTPS with mTLS: https://localhost:8444" -ForegroundColor Cyan
+    Write-Host "- SOAP Service: https://localhost:8444/soap" -ForegroundColor Cyan
+    Write-Host "- WSDL: https://localhost:8444/soap/HelloWorldService?wsdl" -ForegroundColor Cyan
     Write-Host "- Health Check: https://localhost:8443/health" -ForegroundColor Cyan
 }
 
