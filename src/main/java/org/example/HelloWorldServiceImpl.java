@@ -1,5 +1,6 @@
 package org.example;
 
+import io.quarkiverse.cxf.annotation.CXFEndpoint;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.jws.WebService;
 import java.time.LocalDateTime;
@@ -14,6 +15,7 @@ import java.time.format.DateTimeFormatter;
     targetNamespace = "http://example.org/",
     endpointInterface = "org.example.HelloWorldService"
 )
+@CXFEndpoint("/HelloWorldService")
 @ApplicationScoped
 public class HelloWorldServiceImpl implements HelloWorldService {
 

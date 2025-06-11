@@ -19,8 +19,8 @@ public class App implements QuarkusApplication {
     @Override
     public int run(String... args) throws Exception {
         System.out.println("🚀 Quarkus SOAP Service with HTTPS is starting...");
-        System.out.println("📡 SOAP Service available at: https://localhost:8443/soap");
-        System.out.println("📋 WSDL available at: https://localhost:8443/soap/HelloWorldService?wsdl");
+        System.out.println("📡 SOAP Service available at: https://localhost:8444/soap");
+        System.out.println("📋 WSDL available at: https://localhost:8444/soap/HelloWorldService?wsdl");
         System.out.println("🔒 Using HTTPS with self-signed certificate");
 
         Quarkus.waitForExit();

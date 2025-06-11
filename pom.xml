@@ -47,6 +47,12 @@
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-rest</artifactId>
     </dependency>
+
+    <!-- Quarkus REST Jackson for JSON support -->
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-rest-jackson</artifactId>
+    </dependency>
     
     <!-- Quarkus CXF for SOAP services -->
     <dependency>
