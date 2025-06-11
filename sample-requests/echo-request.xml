@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <ns1:echo xmlns:ns1="http://example.org/">
+      <message>Hello from SOAP client!</message>
+    </ns1:echo>
+  </soap:Body>
+</soap:Envelope>
