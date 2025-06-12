@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<definitions targetNamespace="http://example.org/" name="HelloWorldService" 
+             xmlns="http://schemas.xmlsoap.org/wsdl/" 
+             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
+             xmlns:tns="http://example.org/" 
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  
+  <types>
+    <xsd:schema>
+      <xsd:import namespace="http://example.org/" schemaLocation="HelloWorldService_schema1.xsd"/>
+    </xsd:schema>
+  </types>
+  
+  <message name="sayHello">
+    <part name="parameters" element="tns:sayHello"/>
+  </message>
+  
+  <message name="sayHelloResponse">
+    <part name="parameters" element="tns:sayHelloResponse"/>
+  </message>
+  
+  <message name="getServerTime">
+    <part name="parameters" element="tns:getServerTime"/>
+  </message>
+  
+  <message name="getServerTimeResponse">
+    <part name="parameters" element="tns:getServerTimeResponse"/>
+  </message>
+  
+  <message name="echo">
+    <part name="parameters" element="tns:echo"/>
+  </message>
+  
+  <message name="echoResponse">
+    <part name="parameters" element="tns:echoResponse"/>
+  </message>
+  
+  <portType name="HelloWorldService">
+    <operation name="sayHello">
+      <input wsam:Action="http://example.org/HelloWorldService/sayHelloRequest" message="tns:sayHello" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata"/>
+      <output wsam:Action="http://example.org/HelloWorldService/sayHelloResponse" message="tns:sayHelloResponse" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata"/>
+    </operation>
+    <operation name="getServerTime">
+      <input wsam:Action="http://example.org/HelloWorldService/getServerTimeRequest" message="tns:getServerTime" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata"/>
+      <output wsam:Action="http://example.org/HelloWorldService/getServerTimeResponse" message="tns:getServerTimeResponse" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata"/>
+    </operation>
+    <operation name="echo">
+      <input wsam:Action="http://example.org/HelloWorldService/echoRequest" message="tns:echo" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata"/>
+      <output wsam:Action="http://example.org/HelloWorldService/echoResponse" message="tns:echoResponse" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata"/>
+    </operation>
+  </portType>
+  
+  <binding name="HelloWorldServiceSoapBinding" type="tns:HelloWorldService">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+    <operation name="sayHello">
+      <soap:operation soapAction="" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="getServerTime">
+      <soap:operation soapAction="" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="echo">
+      <soap:operation soapAction="" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+  </binding>
+  
+  <service name="HelloWorldService">
+    <port name="HelloWorldPort" binding="tns:HelloWorldServiceSoapBinding">
+      <soap:address location="https://localhost:8444/soap/HelloWorldService"/>
+    </port>
+  </service>
+  
+</definitions>
