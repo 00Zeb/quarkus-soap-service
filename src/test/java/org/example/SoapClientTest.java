@@ -4,6 +4,9 @@ import io.quarkiverse.cxf.annotation.CXFClient;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.BeforeEach;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+
 
 import jakarta.inject.Inject;
 
@@ -35,32 +38,67 @@ import java.security.cert.X509Certificate;
 @QuarkusTest
 public class SoapClientTest {
 
-    // Inject the SOAP client configured via application.properties
+    // Inject the SOAP client configured via application.properties (using generated client)
     @CXFClient("helloWorldClient")
-    HelloWorldService helloWorldService;
+    org.example.client.HelloWorldService helloWorldService;
+
+    // Inject the service URL from application.properties
+    @ConfigProperty(name = "soap.service.url")
+    String serviceUrl;
+
+    // Also inject the CXF client endpoint URL to show it's the same
+    @ConfigProperty(name = "quarkus.cxf.client.helloWorldClient.client-endpoint-url")
+    String cxfClientUrl;
+
+    @BeforeEach
+    void setupSSL() {
+        // Set system properties to disable SSL verification for testing
+        System.setProperty("javax.net.ssl.trustStore", "src/main/resources/truststore.p12");
+        System.setProperty("javax.net.ssl.trustStorePassword", "changeit");
+        System.setProperty("javax.net.ssl.trustStoreType", "PKCS12");
+
+        // Disable hostname verification for localhost
+        System.setProperty("com.sun.net.ssl.checkRevocation", "false");
+        System.setProperty("javax.net.ssl.trustStoreProvider", "SUN");
+
+        // Alternative: disable all SSL verification (for testing only!)
+        System.setProperty("javax.net.ssl.trustStore", "");
+        System.setProperty("javax.net.ssl.trustStorePassword", "");
+
+        System.out.println("SSL system properties configured for testing");
+    }
+
 
     /**
      * Test using Quarkus CXF client with automatic mutual TLS configuration
-     * This is the recommended approach as it uses application.properties configuration
+     * This uses the generated client interface and URL from application.properties
      */
     @Test
     // @Disabled("Enable this test when you want to test the SOAP service manually")
     public void testSoapServiceWithQuarkusClient() throws Exception {
+        System.out.println("=== Configuration from application.properties ===");
+        System.out.println("Custom service URL: " + serviceUrl);
+        System.out.println("CXF client URL: " + cxfClientUrl);
+        System.out.println("Generated client class: " + helloWorldService.getClass().getName());
+        System.out.println("URLs match: " + serviceUrl.equals(cxfClientUrl));
+
         // Call the service using the injected client (mutual TLS configured automatically)
-        String response = helloWorldService.sayHello("Quarkus with mTLS");
+        String response = helloWorldService.sayHello("Quarkus with mTLS from Config");
 
         System.out.println("SOAP Response: " + response);
 
         // Assertions
         assert response != null;
-        assert response.contains("Hello, Quarkus with mTLS!");
+        assert response.contains("Hello, Quarkus with mTLS from Config!");
         assert response.contains("Mutual TLS");
     }
 
     @Test
     // @Disabled("Enable this test when you want to test getServerTime with Quarkus client")
     public void testGetServerTimeWithQuarkusClient() throws Exception {
-        // Call the service using the injected client
+        System.out.println("Calling getServerTime on: " + serviceUrl);
+        configureMutualTLS();
+        // Call the service using the injected generated client
         String response = helloWorldService.getServerTime();
 
         System.out.println("GetServerTime Response: " + response);
@@ -73,9 +111,10 @@ public class SoapClientTest {
     @Test
     // @Disabled("Enable this test when you want to test echo with Quarkus client")
     public void testEchoWithQuarkusClient() throws Exception {
-        String testMessage = "Testing mutual TLS with Quarkus CXF client";
+        String testMessage = "Testing mutual TLS with generated client from config";
+        System.out.println("Calling echo on: " + serviceUrl);
 
-        // Call the service using the injected client
+        // Call the service using the injected generated client
         String response = helloWorldService.echo(testMessage);
 
         System.out.println("Echo Response: " + response);
