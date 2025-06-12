@@ -11,7 +11,12 @@ import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
+import javax.net.ssl.SSLSocketFactory;
 import jakarta.xml.ws.BindingProvider;
+import org.apache.cxf.configuration.jsse.TLSClientParameters;
+import org.apache.cxf.endpoint.Client;
+import org.apache.cxf.frontend.ClientProxy;
+import org.apache.cxf.transport.http.HTTPConduit;
 import java.io.FileInputStream;
 import java.security.KeyStore;
 import java.security.cert.X509Certificate;
@@ -34,11 +39,8 @@ public class GeneratedSoapClientTest {
      * This demonstrates how to use the generated client classes directly
      */
     @Test
-   // @Disabled("Enable this test when you want to test with generated client code manually")
+    // @Disabled("Enable this test when you want to test with generated client code manually")
     public void testSoapServiceWithGeneratedClient() throws Exception {
-        // Configure SSL with mutual TLS (client certificate authentication)
-        configureMutualTLS();
-
         // Create the service using generated client code
         HelloWorldService_Service service = new HelloWorldService_Service();
         HelloWorldService port = service.getHelloWorldPort();
@@ -49,6 +51,9 @@ public class GeneratedSoapClientTest {
             BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
             "https://localhost:8444/soap/HelloWorldService"
         );
+
+        // Configure SSL with mutual TLS for the CXF client
+        configureCXFClientSSL(port);
 
         // Call the service methods
         String response1 = port.sayHello("Generated Client User");
@@ -73,8 +78,61 @@ public class GeneratedSoapClientTest {
     }
 
     /**
+     * Configure SSL with mutual TLS for CXF client
+     * This method configures the CXF client to use mutual TLS with self-signed certificates
+     */
+    private void configureCXFClientSSL(HelloWorldService port) throws Exception {
+        // Get the CXF client from the port
+        Client client = ClientProxy.getClient(port);
+        HTTPConduit httpConduit = (HTTPConduit) client.getConduit();
+
+        // Create TLS client parameters
+        TLSClientParameters tlsParams = new TLSClientParameters();
+
+        // Disable hostname verification for self-signed certificates
+        tlsParams.setDisableCNCheck(true);
+
+        // Load client keystore for mutual TLS
+        KeyStore clientKeyStore = KeyStore.getInstance("PKCS12");
+        String clientKeystorePath = "client-keystore.p12";
+        String keystorePassword = "changeit";
+
+        // Try to load from project root first, then from classpath
+        try (FileInputStream fis = new FileInputStream(clientKeystorePath)) {
+            clientKeyStore.load(fis, keystorePassword.toCharArray());
+        } catch (Exception e) {
+            // If file not found in project root, try loading from classpath
+            try (var is = getClass().getClassLoader().getResourceAsStream(clientKeystorePath)) {
+                if (is == null) {
+                    throw new RuntimeException("Client keystore not found. Please run generate-mtls-certificates.bat first.");
+                }
+                clientKeyStore.load(is, keystorePassword.toCharArray());
+            }
+        }
+
+        // Set up KeyManager for client authentication
+        KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
+        kmf.init(clientKeyStore, keystorePassword.toCharArray());
+        tlsParams.setKeyManagers(kmf.getKeyManagers());
+
+        // Trust all certificates (for testing with self-signed certificates)
+        TrustManager[] trustAllCerts = new TrustManager[]{
+            new X509TrustManager() {
+                public X509Certificate[] getAcceptedIssuers() { return null; }
+                public void checkClientTrusted(X509Certificate[] certs, String authType) { }
+                public void checkServerTrusted(X509Certificate[] certs, String authType) { }
+            }
+        };
+        tlsParams.setTrustManagers(trustAllCerts);
+
+        // Apply TLS parameters to the HTTP conduit
+        httpConduit.setTlsClientParameters(tlsParams);
+    }
+
+    /**
      * Configure SSL with mutual TLS (client certificate authentication)
      * WARNING: Only use this for testing! Never in production!
+     * @deprecated Use configureCXFClientSSL instead for CXF clients
      */
     private void configureMutualTLS() throws Exception {
         // Load client certificate from keystore
