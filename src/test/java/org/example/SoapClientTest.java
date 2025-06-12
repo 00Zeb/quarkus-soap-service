@@ -1,8 +1,11 @@
 package org.example;
 
+import io.quarkiverse.cxf.annotation.CXFClient;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Disabled;
+
+import jakarta.inject.Inject;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.KeyManager;
@@ -23,17 +26,72 @@ import java.security.cert.X509Certificate;
  *
  * Prerequisites:
  * 1. Run generate-mtls-certificates.bat to create client certificates
- * 2. Ensure client-keystore.p12 exists in the project root
+ * 2. Copy client-keystore.p12 to src/test/resources/ (or run copy-client-cert-for-tests.bat)
  * 3. Start the Quarkus application with mutual TLS enabled
  *
- * Note: This test is disabled by default as it requires the service to be running
+ * This test uses Quarkus CXF client configuration from application.properties
+ * for automatic mutual TLS setup.
  */
-//@QuarkusTest
+@QuarkusTest
 public class SoapClientTest {
 
+    // Inject the SOAP client configured via application.properties
+    @CXFClient("helloWorldClient")
+    HelloWorldService helloWorldService;
+
+    /**
+     * Test using Quarkus CXF client with automatic mutual TLS configuration
+     * This is the recommended approach as it uses application.properties configuration
+     */
     @Test
-   // @Disabled("Enable this test when you want to test the SOAP service manually")
-    public void testSoapServiceCall() throws Exception {
+    // @Disabled("Enable this test when you want to test the SOAP service manually")
+    public void testSoapServiceWithQuarkusClient() throws Exception {
+        // Call the service using the injected client (mutual TLS configured automatically)
+        String response = helloWorldService.sayHello("Quarkus with mTLS");
+
+        System.out.println("SOAP Response: " + response);
+
+        // Assertions
+        assert response != null;
+        assert response.contains("Hello, Quarkus with mTLS!");
+        assert response.contains("Mutual TLS");
+    }
+
+    @Test
+    // @Disabled("Enable this test when you want to test getServerTime with Quarkus client")
+    public void testGetServerTimeWithQuarkusClient() throws Exception {
+        // Call the service using the injected client
+        String response = helloWorldService.getServerTime();
+
+        System.out.println("GetServerTime Response: " + response);
+
+        // Assertions
+        assert response != null;
+        assert response.contains("Current server time:");
+    }
+
+    @Test
+    // @Disabled("Enable this test when you want to test echo with Quarkus client")
+    public void testEchoWithQuarkusClient() throws Exception {
+        String testMessage = "Testing mutual TLS with Quarkus CXF client";
+
+        // Call the service using the injected client
+        String response = helloWorldService.echo(testMessage);
+
+        System.out.println("Echo Response: " + response);
+
+        // Assertions
+        assert response != null;
+        assert response.contains("Echo: " + testMessage);
+    }
+
+    /**
+     * Legacy test using manual SSL configuration (kept for reference)
+     * The above Quarkus client approach is preferred
+     */
+    @Test
+    @Disabled("Use testSoapServiceWithQuarkusClient instead - this is kept for reference")
+    public void testSoapServiceCallManual() throws Exception {
         // Configure SSL with mutual TLS (client certificate authentication)
         configureMutualTLS();
 
@@ -80,8 +138,8 @@ public class SoapClientTest {
     }
 
     @Test
-    // @Disabled("Enable this test when you want to test the getServerTime method")
-    public void testGetServerTimeWithMutualTLS() throws Exception {
+    @Disabled("Use testGetServerTimeWithQuarkusClient instead - this is kept for reference")
+    public void testGetServerTimeWithMutualTLSManual() throws Exception {
         // Configure SSL with mutual TLS
         configureMutualTLS();
 

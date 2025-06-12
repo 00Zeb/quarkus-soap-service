@@ -20,6 +20,7 @@ copy "client-keystore.p12" "src\test\resources\"
 
 echo ✅ Client keystore copied to src\test\resources\
 echo.
-echo 🧪 You can now run the SoapClientTest with mutual TLS support
+echo 🧪 You can now run the SoapClientTest with automatic mutual TLS support
+echo    The test will use the configuration from src\test\resources\application.properties
 echo.
 pause
