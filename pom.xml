@@ -53,7 +53,19 @@
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-rest-jackson</artifactId>
     </dependency>
-    
+
+    <!-- Quarkus REST Client for HTTP/REST service integration -->
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-rest-client</artifactId>
+    </dependency>
+
+    <!-- Quarkus REST Client Jackson for JSON support in REST clients -->
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-rest-client-jackson</artifactId>
+    </dependency>
+
     <!-- Quarkus CXF for SOAP services -->
     <dependency>
       <groupId>io.quarkiverse.cxf</groupId>
@@ -70,6 +82,14 @@
     <dependency>
       <groupId>io.rest-assured</groupId>
       <artifactId>rest-assured</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- WireMock for recording and mocking HTTP services -->
+    <dependency>
+      <groupId>com.github.tomakehurst</groupId>
+      <artifactId>wiremock-jre8</artifactId>
+      <version>2.35.0</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

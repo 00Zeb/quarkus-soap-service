@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "POST",
+    "urlPath": "/api/hello/say",
+    "headers": {
+      "Content-Type": {
+        "contains": "application/json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "contains": "name"
+      }
+    ]
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "bodyFileName": "rest-hello-post-response.json"
+  }
+}

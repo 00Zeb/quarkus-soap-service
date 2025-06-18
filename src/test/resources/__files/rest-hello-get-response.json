@@ -1,0 +1,4 @@
+{
+  "result": "Hello, TestUser! Welcome to Quarkus REST Service with Mutual TLS!",
+  "status": "SUCCESS"
+}

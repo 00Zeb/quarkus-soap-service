@@ -19,9 +19,10 @@ public class HealthResource {
     public Response health() {
         Map<String, Object> status = Map.of(
             "status", "UP",
-            "service", "Quarkus SOAP Service",
+            "service", "Quarkus SOAP & REST Service",
             "timestamp", LocalDateTime.now().toString(),
             "soap_endpoint", "/soap",
+            "rest_endpoint", "/api/hello",
             "wsdl_url", "/soap/HelloWorldService?wsdl",
             "https_enabled", true,
             "mutual_tls_enabled", true
@@ -34,10 +35,11 @@ public class HealthResource {
     @Produces(MediaType.TEXT_PLAIN)
     public String info() {
         return """
-            🚀 Quarkus SOAP Service with Mutual TLS
+            🚀 Quarkus SOAP & REST Service with Mutual TLS
 
             📡 SOAP Endpoint: https://localhost:8444/soap
             📋 WSDL: https://localhost:8444/soap/HelloWorldService?wsdl
+            🌐 REST Endpoint: https://localhost:8444/api/hello
             🔒 Mutual TLS: Enabled with client certificate authentication
             ⚡ Health Check: https://localhost:8444/health
             🔑 Client Certificate: Required for all connections
@@ -46,6 +48,13 @@ public class HealthResource {
             - sayHello(name): Returns a greeting message
             - getServerTime(): Returns current server time
             - echo(message): Echoes the input message
+
+            Available REST Endpoints:
+            - GET  /api/hello/say/{name}     - Say hello with path parameter
+            - POST /api/hello/say            - Say hello with JSON request
+            - GET  /api/hello/time           - Get server time
+            - GET  /api/hello/echo?message=  - Echo with query parameter
+            - POST /api/hello/echo           - Echo with JSON request
             """;
     }
 }
