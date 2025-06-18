@@ -19,9 +19,10 @@ import static com.github.tomakehurst.wiremock.client.WireMock.*;
 
 /**
  * Test class using WireMock to mock the REST Hello World service
- * 
- * This test uses pre-created mock mappings to provide fast, reliable tests 
- * without depending on the external service.
+ *
+ * This test uses file-based mock mappings from src/test/resources/mappings
+ * to provide fast, reliable tests without depending on the external service.
+ * No programmatic stub setup is needed - all mappings are loaded from files.
  */
 @QuarkusTest
 @TestProfile(RestClientMockedTest.MockedTestProfile.class)
@@ -53,16 +54,18 @@ public class RestClientMockedTest {
 
     @BeforeAll
     static void setupWireMock() {
-        // Start WireMock server
+        // Start WireMock server with file-based mappings
         wireMockServer = new WireMockServer(
             WireMockConfiguration.options()
                 .port(8090) // HTTP port (matches our test profile)
+                .usingFilesUnderDirectory("src/test/resources") // Load mappings and files from directory
         );
-        
+
         wireMockServer.start();
         WireMock.configureFor("localhost", 8090);
-        
+
         System.out.println("WireMock server started for REST mocking on port 8090");
+        System.out.println("Loaded mappings from src/test/resources/mappings directory");
     }
 
     @AfterAll
@@ -77,11 +80,9 @@ public class RestClientMockedTest {
     void setupMocks() {
         // Reset WireMock before each test
         wireMockServer.resetAll();
-        
-        // Setup all the mocks
-        setupSuccessfulMocks();
-        
-        System.out.println("WireMock reset and mocks configured for REST test");
+
+        // Mappings are automatically loaded from files - no programmatic setup needed
+        System.out.println("WireMock reset - file-based mappings will be used");
     }
 
     @Test
@@ -129,57 +130,5 @@ public class RestClientMockedTest {
         System.out.println("🎉 All REST mock tests passed!");
     }
 
-    private void setupSuccessfulMocks() {
-        // Mock sayHello GET endpoint
-        wireMockServer.stubFor(get(urlMatching("/say/.*"))
-            .willReturn(aResponse()
-                .withStatus(200)
-                .withHeader("Content-Type", "application/json")
-                .withBody("""
-                    {
-                        "result": "Hello, TestUser! Welcome to Quarkus REST Service with Mutual TLS!",
-                        "status": "SUCCESS"
-                    }
-                    """)));
 
-        // Mock sayHello POST endpoint
-        wireMockServer.stubFor(post(urlEqualTo("/say"))
-            .withHeader("Content-Type", containing("application/json"))
-            .willReturn(aResponse()
-                .withStatus(200)
-                .withHeader("Content-Type", "application/json")
-                .withBody("""
-                    {
-                        "result": "Hello, MockUser! Welcome to Quarkus REST Service with Mutual TLS!",
-                        "status": "SUCCESS"
-                    }
-                    """)));
-
-        // Mock getServerTime endpoint
-        wireMockServer.stubFor(get(urlEqualTo("/time"))
-            .willReturn(aResponse()
-                .withStatus(200)
-                .withHeader("Content-Type", "application/json")
-                .withBody("""
-                    {
-                        "result": "Current server time: 2024-01-15 10:30:45",
-                        "timestamp": "2024-01-15 10:30:45",
-                        "status": "SUCCESS"
-                    }
-                    """)));
-
-        // Mock echo GET endpoint
-        wireMockServer.stubFor(get(urlMatching("/echo.*"))
-            .willReturn(aResponse()
-                .withStatus(200)
-                .withHeader("Content-Type", "application/json")
-                .withBody("""
-                    {
-                        "result": "Echo: Mock message",
-                        "status": "SUCCESS"
-                    }
-                    """)));
-
-        System.out.println("Mock responses configured for REST endpoints");
-    }
 }
