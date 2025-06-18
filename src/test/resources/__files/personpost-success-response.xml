@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <ns1:PersonpostXMLResponse xmlns:ns1="http://xmls.skatteverket.se/se/skatteverket/folkbokforing/na/epersondata/V1">
+      <ns1:Folkbokforingsposter>
+        <ns1:Folkbokforingspost>
+          <ns1:PersonId>195811112217</ns1:PersonId>
+          <ns1:Sekretessmarkering>N</ns1:Sekretessmarkering>
+          <ns1:SenasteAndringFolkbokforing>2023-01-15</ns1:SenasteAndringFolkbokforing>
+          <ns1:Personpost>
+            <ns1:PersonId>195811112217</ns1:PersonId>
+            <ns1:Fornamn>Test</ns1:Fornamn>
+            <ns1:Mellannamn></ns1:Mellannamn>
+            <ns1:Efternamn>Testsson</ns1:Efternamn>
+            <ns1:Aviseringsnamn>Test Testsson</ns1:Aviseringsnamn>
+            <ns1:Fodelsetid>1958-11-11</ns1:Fodelsetid>
+            <ns1:Kon>M</ns1:Kon>
+            <ns1:SvenskMedborgare>J</ns1:SvenskMedborgare>
+            <ns1:Folkbokforingsdatum>1958-11-11</ns1:Folkbokforingsdatum>
+            <ns1:Folkbokforingsadress>
+              <ns1:CareOf></ns1:CareOf>
+              <ns1:Utdelningsadress1>Testgatan 123</ns1:Utdelningsadress1>
+              <ns1:Utdelningsadress2></ns1:Utdelningsadress2>
+              <ns1:PostNr>12345</ns1:PostNr>
+              <ns1:Postort>Teststad</ns1:Postort>
+              <ns1:Distrikt>Test</ns1:Distrikt>
+              <ns1:Kommun>1234</ns1:Kommun>
+              <ns1:Lan>12</ns1:Lan>
+              <ns1:Land>SE</ns1:Land>
+            </ns1:Folkbokforingsadress>
+            <ns1:SarskildPostadress>
+              <ns1:CareOf></ns1:CareOf>
+              <ns1:Utdelningsadress1></ns1:Utdelningsadress1>
+              <ns1:Utdelningsadress2></ns1:Utdelningsadress2>
+              <ns1:PostNr></ns1:PostNr>
+              <ns1:Postort></ns1:Postort>
+            </ns1:SarskildPostadress>
+          </ns1:Personpost>
+        </ns1:Folkbokforingspost>
+      </ns1:Folkbokforingsposter>
+    </ns1:PersonpostXMLResponse>
+  </soap:Body>
+</soap:Envelope>

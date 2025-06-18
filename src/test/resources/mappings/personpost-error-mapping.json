@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "POST",
+    "urlPath": "/na/na_epersondata/V4/personpostXML",
+    "headers": {
+      "Content-Type": {
+        "contains": "text/xml"
+      }
+    }
+  },
+  "response": {
+    "status": 500,
+    "headers": {
+      "Content-Type": "text/xml; charset=utf-8"
+    },
+    "body": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\"><soap:Body><soap:Fault><faultcode>Server</faultcode><faultstring>Service Error</faultstring></soap:Fault></soap:Body></soap:Envelope>"
+  }
+}

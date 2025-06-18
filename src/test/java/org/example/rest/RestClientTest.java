@@ -7,6 +7,7 @@ import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.example.rest.client.HelloWorldRestClient;
 import org.example.rest.dto.HelloRequest;
 import org.example.rest.dto.HelloResponse;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -23,7 +24,7 @@ public class RestClientTest {
     String serviceUrl;
 
     @Test
-    //@Disabled("Enable this test when you want to test the REST service manually")
+    @Disabled("Enable this test when you want to test the REST service manually - requires external service running")
     public void testRestHelloWorldService() throws Exception {
         System.out.println("=== Testing REST Hello World Service ===");
         System.out.println("Service URL: " + serviceUrl);

@@ -29,11 +29,10 @@ public class RestMockGeneratorTest {
 
     @BeforeAll
     static void setupWireMock() {
-        // Configure WireMock with HTTPS support and recording
+        // Configure WireMock with HTTP only for recording (avoid certificate issues)
         wireMockServer = new WireMockServer(
             WireMockConfiguration.options()
                 .port(8091) // WireMock proxy port for REST
-                .httpsPort(8450) // WireMock HTTPS proxy port for REST
                 .enableBrowserProxying(true) // Enable proxy mode
                 .trustAllProxyTargets(true) // Trust all SSL certificates
                 .preserveHostHeader(true) // Preserve original host header
@@ -44,7 +43,7 @@ public class RestMockGeneratorTest {
         // Configure WireMock to record interactions with the real service
         WireMock.configureFor("localhost", 8091);
         
-        System.out.println("WireMock server started on port 8091 (HTTP) and 8450 (HTTPS) for REST recording");
+        System.out.println("WireMock server started on port 8091 (HTTP) for REST recording");
         System.out.println("Recording mode enabled - will proxy to real REST service");
     }
 

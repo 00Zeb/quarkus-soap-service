@@ -44,7 +44,7 @@ public class RestClientMockedTest {
             return Map.of(
                 // Point to WireMock instead of real service
                 "rest.service.url", "http://localhost:8090/api/hello",
-                "quarkus.rest-client.hello-world-rest-client.url", "http://localhost:8090/api/hello",
+                "quarkus.rest-client.hello-world-rest-client.url", "http://localhost:8090",
                 // Disable TLS for mocking
                 "quarkus.rest-client.hello-world-rest-client.tls-configuration-name", ""
             );
@@ -131,7 +131,7 @@ public class RestClientMockedTest {
 
     private void setupSuccessfulMocks() {
         // Mock sayHello GET endpoint
-        wireMockServer.stubFor(get(urlMatching("/api/hello/say/.*"))
+        wireMockServer.stubFor(get(urlMatching("/say/.*"))
             .willReturn(aResponse()
                 .withStatus(200)
                 .withHeader("Content-Type", "application/json")
@@ -143,7 +143,7 @@ public class RestClientMockedTest {
                     """)));
 
         // Mock sayHello POST endpoint
-        wireMockServer.stubFor(post(urlEqualTo("/api/hello/say"))
+        wireMockServer.stubFor(post(urlEqualTo("/say"))
             .withHeader("Content-Type", containing("application/json"))
             .willReturn(aResponse()
                 .withStatus(200)
@@ -156,7 +156,7 @@ public class RestClientMockedTest {
                     """)));
 
         // Mock getServerTime endpoint
-        wireMockServer.stubFor(get(urlEqualTo("/api/hello/time"))
+        wireMockServer.stubFor(get(urlEqualTo("/time"))
             .willReturn(aResponse()
                 .withStatus(200)
                 .withHeader("Content-Type", "application/json")
@@ -169,7 +169,7 @@ public class RestClientMockedTest {
                     """)));
 
         // Mock echo GET endpoint
-        wireMockServer.stubFor(get(urlMatching("/api/hello/echo.*"))
+        wireMockServer.stubFor(get(urlMatching("/echo.*"))
             .willReturn(aResponse()
                 .withStatus(200)
                 .withHeader("Content-Type", "application/json")
